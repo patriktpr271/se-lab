@@ -1,5 +1,6 @@
 package hu.bme.mit.spaceship;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -8,7 +9,9 @@ import java.util.Random;
 * (Deliberately contains bugs.)
 */
 public class TorpedoStore {
-  private Random generator = new Random();
+  SecureRandom generator = new SecureRandom(); // Compliant for security-sensitive use cases
+  byte[] bytes = new byte[20];
+  
 
   // rate of failing to fire torpedos [0.0, 1.0]
   private double FAILURE_RATE = 0.0; //NOSONAR
@@ -38,7 +41,9 @@ public class TorpedoStore {
     boolean success = false;
 
     // simulate random overheating of the launcher bay which prevents firing
+    generator.nextBytes(bytes);
     double r = generator.nextDouble();
+
 
     if (r >= FAILURE_RATE) {
       // successful firing
